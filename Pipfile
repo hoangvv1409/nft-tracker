@@ -5,6 +5,7 @@ name = "pypi"
 
 [scripts]
 api = "uvicorn api_runner:app --reload --host 0.0.0.0"
+test = "pipenv run pytest -vvv --disable-warnings tests"
 
 [packages]
 alembic = "*"
