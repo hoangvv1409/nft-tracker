@@ -4,6 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [scripts]
+api = "uvicorn api_runner:app --reload --host 0.0.0.0"
 
 [packages]
 alembic = "*"
