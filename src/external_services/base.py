@@ -14,6 +14,10 @@ class BadRequest(Exception):
     pass
 
 
+class InternalServerError(Exception):
+    pass
+
+
 class BaseClient():
     def __init__(self):
         self._max_retry = 5
@@ -23,6 +27,9 @@ class BaseClient():
         self, request_func, request_params, retry: int = 0,
     ) -> Response:
         response = request_func(**request_params)
+        if response.status_code == 500:
+            raise InternalServerError
+
         if response.status_code == 400:
             raise BadRequest(response.json())
 
