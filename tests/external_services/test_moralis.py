@@ -51,7 +51,7 @@ class TestMoralis:
 
     def test_get_collection_metadata_with_non_exist_contract_address(self):
         invalid_contract =\
-            '0xBC4CA0EdA7647A8aB7C2061c2E118A19'
+            '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13E'
 
         with pytest.raises(NotFound) as e:
             client.get_collection_metadata(
