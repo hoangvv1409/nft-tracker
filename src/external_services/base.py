@@ -10,6 +10,10 @@ class RateLimit(Exception):
     pass
 
 
+class BadRequest(Exception):
+    pass
+
+
 class BaseClient():
     def __init__(self):
         self.max_retry = 5
@@ -18,6 +22,9 @@ class BaseClient():
         self, request_func, request_params, retry: int = 0,
     ) -> Response:
         response = request_func(**request_params)
+        if response.status_code == 400:
+            raise BadRequest(response.json())
+
         if response.status_code == 404:
             raise NotFound
 
