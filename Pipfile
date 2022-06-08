@@ -25,6 +25,7 @@ pytz = "==2018.9"
 psycopg2 = "==2.9.3"
 psycopg2-binary = "*"
 pydantic = "==1.9.0"
+beautifulsoup4 = "~=4.11.1"
 
 [dev-packages]
 autopep8 = "==1.4.3"
