@@ -16,7 +16,8 @@ class BadRequest(Exception):
 
 class BaseClient():
     def __init__(self):
-        self.max_retry = 5
+        self._max_retry = 5
+        self._sleep_time_sec = 5
 
     def response_handler(
         self, request_func, request_params, retry: int = 0,
@@ -29,11 +30,11 @@ class BaseClient():
             raise NotFound
 
         if response.status_code == 429:
-            if retry <= self.max_retry:
+            if retry <= self._max_retry:
                 retry += 1
                 print(f'{retry} Retrying....')
-                time.sleep(5)
-                return self._response_handler(
+                time.sleep(self._sleep_time_sec)
+                return self.response_handler(
                     request_func, request_params, retry)
             else:
                 raise RateLimit
