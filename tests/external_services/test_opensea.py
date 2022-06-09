@@ -10,7 +10,7 @@ client = OpenSea(
 )
 
 
-class TestOpensea:
+class TestOpenseaGetCollection:
     def test_get_collection_metadata_with_valid_address(self):
         bored_ape_contract_address =\
             '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
@@ -47,3 +47,22 @@ class TestOpensea:
             )
 
             print(str(e))
+
+
+class TestOpenseaGetCollectionStat:
+    def test_collection_stats_with_valid_slug(self):
+        bored_ape_opensea_slug = 'boredapeyachtclub'
+
+        response = client.get_collection_stats(
+            slug=bored_ape_opensea_slug,
+        )
+
+        assert 'stats' in response
+
+    def test_collection_stats_with_not_exist_slug(self):
+        bored_ape_opensea_slug = 'non_exist_slug'
+
+        with pytest.raises(NotFound) as e:
+            client.get_collection_stats(
+                slug=bored_ape_opensea_slug,
+            )

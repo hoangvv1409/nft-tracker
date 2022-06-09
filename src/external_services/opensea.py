@@ -27,3 +27,12 @@ class OpenSea(BaseClient):
         })
 
         return response.json()
+
+    def get_collection_stats(self, slug: str) -> Dict:
+        url = f'{self.base_url}/collection/{slug}/stats'
+        response = self.response_handler(requests.get, {
+            'url': url,
+            'headers': self.headers,
+        })
+
+        return response.json()
