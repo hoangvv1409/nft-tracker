@@ -1,14 +1,17 @@
-from typing import Type
-from sqlalchemy.orm import Session
-from .schema_base import Base
 from sqlalchemy import exc
+from sqlalchemy.orm import Session
+from typing import TypeVar, Type, List, Optional, Generic
+
+from .schema_base import Base
+
+T = TypeVar('T')
 
 
 class Duplicate(Exception):
     pass
 
 
-class CRUD:
+class CRUD(Generic[T]):
     session: Type[Session] = None
     model: Type[Base] = None
 
@@ -16,11 +19,11 @@ class CRUD:
         self.session = session
         self.model = model
 
-    def find_by_id(self, model_id):
+    def find_by_id(self, model_id) -> Optional[T]:
         q = self.session.query(self.model).filter(self.model.id == model_id)
         return q.first()
 
-    def find(self, **conditions):
+    def find(self, **conditions) -> List[T]:
         query = self.session.query(self.model)
         for key, value in conditions.items():
             if isinstance(value, list):
@@ -30,7 +33,7 @@ class CRUD:
 
         return query.all()
 
-    def find_paging(self, limit=None, offset=None, **conditions):
+    def find_paging(self, limit=None, offset=None, **conditions) -> List[T]:
         query = self.session.query(self.model)
         for key, value in conditions.items():
             if isinstance(value, list):
@@ -44,7 +47,7 @@ class CRUD:
             records = query.all()
             return len(records), records
 
-    def first(self, **conditions):
+    def first(self, **conditions) -> Optional[T]:
         query = self.session.query(self.model)
         for key, value in conditions.items():
             if isinstance(value, list):
@@ -55,8 +58,7 @@ class CRUD:
         return query.first()
 
     def create_from_specific_schema(
-        self, schema, flush=True, mapping=None, **data
-    ):
+            self, schema, flush=True, mapping=None, **data):
         try:
             obj = schema()
             for key in data:
@@ -74,7 +76,7 @@ class CRUD:
         except exc.IntegrityError as e:
             raise e
 
-    def create(self, flush=True, mapping=None, **data):
+    def create(self, flush=True, mapping=None, **data) -> T:
         try:
             obj = self.model()
             for key in data:
@@ -96,7 +98,7 @@ class CRUD:
                 '23505': Duplicate(e.orig.pgerror)
             }[e.orig.pgcode] or exc.IntegrityError
 
-    def update(self, obj, flush=True, only=None, **data):
+    def update(self, obj, flush=True, only=None, **data) -> T:
         if obj:
             for k in data:
                 if hasattr(obj, k) and (only is None or k in only):
@@ -108,7 +110,7 @@ class CRUD:
     def bulk_update(self, records):
         return self.session.bulk_update_mappings(self.model, records)
 
-    def delete(self, obj, flush=True):
+    def delete(self, obj, flush=True) -> bool:
         try:
             self.session.delete(obj)
             if flush:
