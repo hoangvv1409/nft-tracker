@@ -19,4 +19,4 @@ class CollectionSchema(DeclarativeBase, Base, DateTimestamp):
     official_site = Column(String, nullable=True)
     created_date = Column(DateTime(timezone=True), nullable=True)
 
-    payload = Column(JSON, nullable=False)
+    provider_payload = Column(JSON, nullable=False)

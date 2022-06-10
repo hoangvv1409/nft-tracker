@@ -32,7 +32,7 @@ def upgrade():
         sa.Column('official_site', sa.String, nullable=True),
         sa.Column('created_date', sa.DateTime(timezone=True), nullable=True),
 
-        sa.Column('payload', sa.JSON, nullable=True),
+        sa.Column('provider_payload', sa.JSON, nullable=True),
 
         sa.Column('_created_at', sa.TIMESTAMP, nullable=True),
         sa.Column('_updated_at', sa.TIMESTAMP, nullable=True),
