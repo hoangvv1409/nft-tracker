@@ -1,8 +1,8 @@
-from src.databases.repo_base import CRUD
+from ..interface import ICollectionRepository
 from ..models import CollectionSchema
 
 
-class CollectionRepository(CRUD):
+class CollectionRepository(ICollectionRepository):
     def __init__(self, session):
         self.session = session
         self.model = CollectionSchema
