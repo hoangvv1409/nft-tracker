@@ -1,4 +1,4 @@
 # flake8: noqa
 from .collection import (
-    Collection, Chain, ContractType,
+    Collection, Chain, ContractType, CollectionStats,
 )
