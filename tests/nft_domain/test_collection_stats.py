@@ -3,10 +3,10 @@ from pathlib import Path
 from src.modules.nft.domain import CollectionStats
 
 
-class TestCollection:
+class TestCollectionStats:
     def test_create_collection_stats_from_open_sea(self):
         path = Path(__file__).parent / \
-            './opensea_response/collection_stats.json'
+            '../api_response/opensea/collection_stats.json'
         f = open(path)
         payload = json.load(f)
         bored_ape_contract_address =\
