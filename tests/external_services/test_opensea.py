@@ -82,6 +82,19 @@ class TestOpenseaGetNftOfCollection:
 
         assert 'assets' in response
         assert 'next' in response
+        assert response['next'] is not None
+        assert response['previous'] is None
+        assert len(response['assets']) == 50
+
+        response = client.get_nft_of_collection(
+            contract_address=bored_ape_contract_address,
+            cursor=response['next'],
+        )
+
+        assert 'assets' in response
+        assert 'next' in response
+        assert response['next'] is not None
+        assert response['previous'] is not None
         assert len(response['assets']) == 50
 
     def test_get_nft_of_collection_with_invalid_contract_address(self):
