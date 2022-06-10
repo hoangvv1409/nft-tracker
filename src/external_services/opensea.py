@@ -27,3 +27,30 @@ class OpenSea(BaseClient):
         })
 
         return response.json()
+
+    def get_collection_stats(self, slug: str) -> Dict:
+        url = f'{self.base_url}/collection/{slug}/stats'
+        response = self.response_handler(requests.get, {
+            'url': url,
+            'headers': self.headers,
+        })
+
+        return response.json()
+
+    def get_nft_of_collection(
+        self, contract_address, cursor=None,
+    ) -> List[Dict]:
+        url = '{}/assets?limit=50&asset_contract_addresses={}'.format(
+            self.base_url,
+            contract_address,
+        )
+
+        if cursor:
+            url = f'{url}&cursor={cursor}'
+
+        response = self.response_handler(requests.get, {
+            'url': url,
+            'headers': self.headers,
+        })
+
+        return response.json()
