@@ -32,6 +32,7 @@ def first(iterable, default=None):
     return default
 
 
+# This only serve generic case (1:1 mapping)
 def domain_model_to_orm_schema_mapper(schema, domain_model):
     attrs = [a for a in dir(schema) if not a.startswith('_')]
     orm_obj = schema()
