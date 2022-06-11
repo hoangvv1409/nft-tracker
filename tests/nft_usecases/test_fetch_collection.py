@@ -20,9 +20,7 @@ collection_results = [
 
 
 class MockProviderComposer(IProviderComposer):
-    def fetch_collections(
-        self, page: int = 1, page_size: int = 100,
-    ) -> List[Collection]:
+    def fetch_collection(self, contract_address: str) -> Collection:
         pass
 
     def fetch_collections_iterator(

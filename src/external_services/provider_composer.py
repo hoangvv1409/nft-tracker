@@ -1,5 +1,5 @@
 import os
-from typing import List, Iterator
+from typing import Iterator
 from abc import ABC, abstractmethod
 
 from src.modules.nft.domain import Collection
@@ -9,15 +9,13 @@ from .opensea import OpenSea
 
 class IProviderComposer(ABC):
     @abstractmethod
-    def fetch_collections(
-        self, page: int = 1, page_size: int = 100,
-    ) -> List[Collection]:
-        pass
-
-    @abstractmethod
     def fetch_collections_iterator(
         self, page: int = 1, page_size: int = 100,
     ) -> Iterator[Collection]:
+        pass
+
+    @abstractmethod
+    def fetch_collection(self, contract_address: str) -> Collection:
         pass
 
 
@@ -38,28 +36,11 @@ class ProviderComposer(IProviderComposer):
         )
 
         for r in results:
-            collection = self._fetch_collection_metadata(
-                r['contract_address'].lower()
-            )
+            collection = self.fetch_collection(r['contract_address'])
             yield collection
 
-    def fetch_collections(
-        self, page: int = 1, page_size: int = 100,
-    ) -> List[Collection]:
-        results = self.etherscan.get_all_collections(
-            page=page,
-            page_size=page_size,
-        )
+    def fetch_collection(self, contract_address: str) -> Collection:
+        addr = contract_address.lower()
+        response = self.opensea.get_collection_metadata(addr)
 
-        collections = [
-            self._fetch_collection_metadata(
-                r['contract_address'].lower()
-            )
-            for r in results
-        ]
-
-        return collections
-
-    def _fetch_collection_metadata(self, contract_address: str) -> Collection:
-        response = self.opensea.get_collection_metadata(contract_address)
         return Collection.create(response)
