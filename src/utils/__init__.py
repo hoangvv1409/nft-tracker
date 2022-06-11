@@ -1,3 +1,6 @@
+from enum import Enum
+
+
 def validate_links(url):
     import re
 
@@ -27,3 +30,17 @@ def first(iterable, default=None):
     for item in iterable:
         return item
     return default
+
+
+def domain_model_to_orm_schema_mapper(schema, domain_model):
+    attrs = [a for a in dir(schema) if not a.startswith('_')]
+    orm_obj = schema()
+    for attr in attrs:
+        if hasattr(domain_model, attr):
+            value = getattr(domain_model, attr)
+            if isinstance(attr, Enum):
+                value = value.value
+
+            setattr(orm_obj, attr, value)
+
+    return orm_obj
