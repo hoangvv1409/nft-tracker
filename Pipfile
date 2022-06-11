@@ -23,7 +23,6 @@ kafka-python = "==2.0.1"
 pyjwt = {extras = ["crypto"], version = "*"}
 click = "==7.0"
 pytz = "==2018.9"
-psycopg2 = "==2.9.3"
 psycopg2-binary = "*"
 pydantic = "==1.9.0"
 beautifulsoup4 = "~=4.11.1"
