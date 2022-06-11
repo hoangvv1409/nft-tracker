@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, Tuple
 
 from src.utils import domain_model_to_orm_schema_mapper
 from src.modules.nft.domain import (
@@ -17,7 +17,7 @@ class FetchCollectionsStats:
         self.api_client = api_client
         self.collection_repo = collection_repository
 
-    def execute(self) -> Iterator[Collection]:
+    def execute(self) -> Iterator[Tuple[Collection, CollectionStats]]:
         collections_orm = self.collection_repo.find()
         for collection_orm in collections_orm:
             # TODO: move this to common mapper
@@ -38,7 +38,7 @@ class FetchCollectionsStats:
                 slug=collection.opensea_slug
             )
             self._collection_stats_handler(stats)
-            yield stats
+            yield collection, stats
 
     def _collection_stats_handler(self, stats: CollectionStats):
         stats_orm = self.collection_repo.get_stats(

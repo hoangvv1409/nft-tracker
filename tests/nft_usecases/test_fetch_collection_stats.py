@@ -74,6 +74,7 @@ class TestFetchCollectionStats:
             api_client=MockProviderComposer(),
             collection_repository=MockCollectionRepo(),
         )
-        stats = next(fetch_collection_stats.execute())
+        collection, stats = next(fetch_collection_stats.execute())
 
+        assert isinstance(collection, Collection)
         assert isinstance(stats, CollectionStats)
