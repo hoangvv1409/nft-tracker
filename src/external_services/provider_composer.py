@@ -14,6 +14,12 @@ class IProviderComposer(ABC):
     ) -> List[Collection]:
         pass
 
+    @abstractmethod
+    def fetch_collections_iterator(
+        self, page: int = 1, page_size: int = 100,
+    ) -> Iterator[Collection]:
+        pass
+
 
 class ProviderComposer(IProviderComposer):
     def __init__(self):
