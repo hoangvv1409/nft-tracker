@@ -3,13 +3,18 @@ from src.modules.nft.domain.collection import Collection
 
 
 class TestProviderComposer:
-    def test_fetch_collections(self):
-        page_size = 10
+    def test_fetch_collection(self):
+        bored_ape_contract_address =\
+            '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
         client = ProviderComposer()
-        # test with small page_size (10) for faster result
-        response = client.fetch_collections(page=1, page_size=page_size)
+        collection = client.fetch_collection(bored_ape_contract_address)
 
-        assert len(response) == page_size
+        assert isinstance(collection, Collection)
+        assert collection.symbol == 'BAYC'
+        assert collection.type.value == 'ERC721'
+        assert collection.name == 'BoredApeYachtClub'
+        assert collection.contract_address ==\
+            bored_ape_contract_address.lower()
 
     def test_fetch_collections_iterator(self):
         page_size = 10
