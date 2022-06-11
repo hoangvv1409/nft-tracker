@@ -57,6 +57,17 @@ class Collection:
             provider_payload={'opensea': response},
         )
 
+    @property
+    def opensea_slug(self):
+        opensea_payload = self.provider_payload.get('opensea')
+        if not opensea_payload:
+            return
+
+        if not opensea_payload['collection']:
+            return
+
+        return opensea_payload['collection']['slug']
+
     def __repr__(self):
         response = 'Name: {} | Symbol: {} | Addr: {}'.format(
             self.name,
