@@ -20,6 +20,8 @@ class IProviderComposer(ABC):
 
 
 class ProviderComposer(IProviderComposer):
+    # FIXME:
+    # env should be injected
     def __init__(self):
         self.etherscan = EtherScanScraper(os.getenv('ETHER_SCAN_HOST'))
         self.opensea = OpenSea(
