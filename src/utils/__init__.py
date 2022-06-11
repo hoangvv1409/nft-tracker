@@ -41,7 +41,7 @@ def domain_model_to_orm_schema_mapper(schema, domain_model):
     for attr in attrs:
         if hasattr(domain_model, attr):
             value = getattr(domain_model, attr)
-            if isinstance(attr, Enum):
+            if isinstance(value, Enum):
                 value = value.value
 
             setattr(orm_obj, attr, value)
