@@ -6,7 +6,7 @@ from src.modules.nft.domain import Collection, Chain, ContractType
 class TestCollection:
     def test_create_collection_from_open_sea(self):
         path = Path(__file__).parent / \
-            './opensea_response/collection.json'
+            '../api_response/opensea/collection.json'
         f = open(path)
         payload = json.load(f)
 

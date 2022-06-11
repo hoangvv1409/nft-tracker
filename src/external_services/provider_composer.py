@@ -1,5 +1,5 @@
 import os
-from typing import List
+from typing import List, Iterator
 from abc import ABC, abstractmethod
 
 from src.modules.nft.domain import Collection
@@ -14,6 +14,12 @@ class IProviderComposer(ABC):
     ) -> List[Collection]:
         pass
 
+    @abstractmethod
+    def fetch_collections_iterator(
+        self, page: int = 1, page_size: int = 100,
+    ) -> Iterator[Collection]:
+        pass
+
 
 class ProviderComposer(IProviderComposer):
     def __init__(self):
@@ -22,6 +28,20 @@ class ProviderComposer(IProviderComposer):
             base_url=os.getenv('OPENSEA_HOST'),
             api_key=os.getenv('OPENSEA_KEY'),
         )
+
+    def fetch_collections_iterator(
+        self, page: int = 1, page_size: int = 100,
+    ) -> Iterator[Collection]:
+        results = self.etherscan.get_all_collections(
+            page=page,
+            page_size=page_size,
+        )
+
+        for r in results:
+            collection = self._fetch_collection_metadata(
+                r['contract_address'].lower()
+            )
+            yield collection
 
     def fetch_collections(
         self, page: int = 1, page_size: int = 100,
