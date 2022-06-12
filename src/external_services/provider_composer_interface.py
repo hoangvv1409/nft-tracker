@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterator, Tuple
 
-from src.modules.nft.domain import Collection, CollectionStats
+from src.modules.nft.domain import Collection, CollectionStats, Token
 
 
 class IProviderComposer(ABC):
@@ -25,4 +25,10 @@ class IProviderComposer(ABC):
     def fetch_collections_and_stats_iterator(
         self, page: int = 1, page_size: int = 100,
     ) -> Iterator[Tuple[Collection, CollectionStats]]:
+        pass
+
+    @abstractmethod
+    def fetch_tokens(
+        self, contract_address: str, cursor=None,
+    ) -> Iterator[Token]:
         pass
