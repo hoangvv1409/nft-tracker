@@ -1,14 +1,16 @@
 import json
 from pathlib import Path
-from typing import Optional, Iterator, Tuple
+from typing import List, Iterator, Tuple
 from src.modules.nft.domain import Collection, CollectionStats
 
 from src.external_services import IProviderComposer
-from src.modules.nft.usecases import FetchCollections
+from src.modules.nft.usecases import FetchCollectionsStats
 from src.modules.nft.databases.interface import ICollectionRepository
 from src.modules.nft.databases.models import (
-    CollectionSchema, CollectionStatSchema)
+    CollectionStatSchema, CollectionSchema)
+from src.utils import domain_model_to_orm_schema_mapper
 
+contract_address = '0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d'
 path = Path(__file__).parent / \
     '../api_response/opensea/collection.json'
 f = open(path)
@@ -18,6 +20,11 @@ collection_results = [
     Collection.create(payload),
     Collection.create(payload),
 ]
+
+path = Path(__file__).parent / \
+    '../api_response/opensea/collection_stats.json'
+f = open(path)
+stats_payload = json.load(f)
 
 
 class MockProviderComposer(IProviderComposer):
@@ -33,7 +40,7 @@ class MockProviderComposer(IProviderComposer):
     def fetch_collection_stats(
         self, contract_address: str = None, slug: str = None,
     ) -> CollectionStats:
-        pass
+        return CollectionStats.create(contract_address, stats_payload)
 
     def fetch_collections_and_stats_iterator(
         self, page: int = 1, page_size: int = 100,
@@ -41,26 +48,33 @@ class MockProviderComposer(IProviderComposer):
         pass
 
 
-class TestFetchCollection:
-    def test_get_non_exist_collection(self):
+class TestFetchCollectionStats:
+    def test_get_non_exist_stats(self):
         class MockCollectionRepo(ICollectionRepository):
-            def first(self, **conditions) -> Optional[CollectionSchema]:
-                assert 'contract_address' in conditions
-                return None
+            def find(self, **conditions) -> List[CollectionSchema]:
+                assert conditions == {}
+                return [
+                    domain_model_to_orm_schema_mapper(
+                        CollectionSchema, collection_results[0]),
+                    domain_model_to_orm_schema_mapper(
+                        CollectionSchema, collection_results[1]),
+                ]
 
             def create_from_schema(
-                self, obj: CollectionSchema, flush=True, mapping=None,
-            ) -> CollectionSchema:
-                assert isinstance(obj, CollectionSchema)
-                return obj
+                self, obj: CollectionStatSchema, flush=True, mapping=None,
+            ) -> CollectionStatSchema:
+                assert isinstance(obj, CollectionStatSchema)
 
             def get_stats(self, contract_address: str) -> CollectionStatSchema:
-                pass
+                assert contract_address is not None
+                assert contract_address != ''
+                return None
 
-        fetch_collection = FetchCollections(
+        fetch_collection_stats = FetchCollectionsStats(
             api_client=MockProviderComposer(),
             collection_repository=MockCollectionRepo(),
         )
-        collection = next(fetch_collection.execute())
+        collection, stats = next(fetch_collection_stats.execute())
 
         assert isinstance(collection, Collection)
+        assert isinstance(stats, CollectionStats)

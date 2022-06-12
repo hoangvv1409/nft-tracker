@@ -8,7 +8,7 @@ from src.external_services.provider_composer import (
 from src.modules.nft.databases.interface import ICollectionRepository
 from src.modules.nft.databases.repositories import CollectionRepository
 
-from src.modules.nft.usecases import FetchCollections
+from src.modules.nft.usecases import FetchCollections, FetchCollectionsStats
 
 
 @dataclass()
@@ -18,6 +18,7 @@ class Dependencies:
     collection_repository: ICollectionRepository
 
     fetch_collections_usecase: FetchCollections
+    fetch_collections_stats_usecase: FetchCollectionsStats
 
     @staticmethod
     def init_real(session):
@@ -27,12 +28,17 @@ class Dependencies:
             api_client=api_client,
             collection_repository=collection_repo,
         )
+        fetch_collections_stats_usecase = FetchCollectionsStats(
+            api_client=api_client,
+            collection_repository=collection_repo,
+        )
 
         return Dependencies(
             session=session,
             api_client=api_client,
             collection_repository=collection_repo,
             fetch_collections_usecase=fetch_collections_usecase,
+            fetch_collections_stats_usecase=fetch_collections_stats_usecase,
         )
 
     @staticmethod

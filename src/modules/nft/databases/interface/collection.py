@@ -1,8 +1,10 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from src.databases.repo_base import CRUD
 
-from ..models import CollectionSchema
+from ..models import CollectionSchema, CollectionStatSchema
 
 
 class ICollectionRepository(ABC, CRUD[CollectionSchema]):
-    pass
+    @abstractmethod
+    def get_stats(self, contract_address: str) -> CollectionStatSchema:
+        pass

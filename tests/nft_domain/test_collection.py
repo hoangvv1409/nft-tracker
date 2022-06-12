@@ -2,14 +2,14 @@ import json
 from pathlib import Path
 from src.modules.nft.domain import Collection, Chain, ContractType
 
+path = Path(__file__).parent / \
+    '../api_response/opensea/collection.json'
+f = open(path)
+payload = json.load(f)
+
 
 class TestCollection:
     def test_create_collection_from_open_sea(self):
-        path = Path(__file__).parent / \
-            '../api_response/opensea/collection.json'
-        f = open(path)
-        payload = json.load(f)
-
         collection = Collection.create(payload)
 
         assert collection.contract_address == payload['address']
@@ -29,3 +29,13 @@ class TestCollection:
             payload['symbol'],
             payload['address'],
         )
+
+    def test_opensea_slug_property_when_opensea_payload_exist(self):
+        collection = Collection.create(payload)
+        assert collection.opensea_slug == 'boredapeyachtclub'
+
+    def test_opensea_slug_property_when_opensea_payload_non_exist(self):
+        collection = Collection.create(payload)
+        collection.provider_payload.pop('opensea', None)
+
+        assert collection.opensea_slug is None
