@@ -33,10 +33,15 @@ class FetchCollectionsStats:
                 created_date=collection_orm.created_date,
                 provider_payload=collection_orm.provider_payload,
             )
-            stats = self.api_client.fetch_collection_stats(
-                contract_address=collection.contract_address,
-                slug=collection.opensea_slug
-            )
+            try:
+                stats = self.api_client.fetch_collection_stats(
+                    contract_address=collection.contract_address,
+                    slug=collection.opensea_slug,
+                )
+            # TODO: Handling exception here (Notfound, BadRequest, ...)
+            except:
+                continue
+
             self._collection_stats_handler(stats)
             yield collection, stats
 
