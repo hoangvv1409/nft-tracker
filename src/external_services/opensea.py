@@ -37,8 +37,8 @@ class OpenSea(BaseClient):
 
         return response.json()
 
-    def get_nft_of_collection(
-        self, contract_address, cursor=None,
+    def get_tokens_of_collection(
+        self, contract_address: str, cursor=None,
     ) -> List[Dict]:
         url = '{}/assets?limit=50&asset_contract_addresses={}'.format(
             self.base_url,
