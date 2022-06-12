@@ -6,6 +6,8 @@ name = "pypi"
 [scripts]
 api = "uvicorn api_runner:app --reload --host 0.0.0.0"
 test = "pipenv run pytest -vvv --disable-warnings --cov=src tests"
+fetch_collections = "pipenv run python fetch_collections.py"
+fetch_stats = "pipenv run python fetch_collections_stats.py"
 
 [packages]
 alembic = "*"
