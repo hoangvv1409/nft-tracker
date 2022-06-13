@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 from typing import List, Iterator, Tuple
-from src.modules.nft.domain import Collection, CollectionStats
+from src.modules.nft.domain import Collection, CollectionStats, Token
 
 from src.external_services import IProviderComposer
 from src.modules.nft.usecases import FetchCollectionsStats
@@ -45,6 +45,11 @@ class MockProviderComposer(IProviderComposer):
     def fetch_collections_and_stats_iterator(
         self, page: int = 1, page_size: int = 100,
     ) -> Iterator[Tuple[Collection, CollectionStats]]:
+        pass
+
+    def fetch_tokens(
+        self, contract_address: str, cursor=None,
+    ) -> Iterator[Token]:
         pass
 
 
