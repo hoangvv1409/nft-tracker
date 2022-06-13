@@ -76,7 +76,7 @@ class TestOpenseaGetNftOfCollection:
         bored_ape_contract_address =\
             '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D'
 
-        response = client.get_nft_of_collection(
+        response = client.get_tokens_of_collection(
             contract_address=bored_ape_contract_address
         )
 
@@ -86,7 +86,7 @@ class TestOpenseaGetNftOfCollection:
         assert response['previous'] is None
         assert len(response['assets']) == 50
 
-        response = client.get_nft_of_collection(
+        response = client.get_tokens_of_collection(
             contract_address=bored_ape_contract_address,
             cursor=response['next'],
         )
@@ -102,7 +102,7 @@ class TestOpenseaGetNftOfCollection:
             '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D2947829svwqq4'
 
         with pytest.raises(BadRequest) as e:
-            client.get_nft_of_collection(
+            client.get_tokens_of_collection(
                 contract_address=invalid_contract,
             )
 
@@ -112,7 +112,7 @@ class TestOpenseaGetNftOfCollection:
         invalid_contract =\
             '0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13E'
 
-        response = client.get_nft_of_collection(
+        response = client.get_tokens_of_collection(
             contract_address=invalid_contract,
         )
 
