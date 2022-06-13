@@ -1,7 +1,6 @@
 import json
 from pathlib import Path
 
-from pkg_resources import to_filename
 from src.modules.nft.domain import Token
 
 path = Path(__file__).parent / \
