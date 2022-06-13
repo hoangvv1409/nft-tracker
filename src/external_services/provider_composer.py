@@ -1,7 +1,7 @@
 import os
 from typing import Iterator, Tuple
 
-from src.modules.nft.domain import Collection, CollectionStats
+from src.modules.nft.domain import Collection, CollectionStats, Token
 from .etherscan_scraper import EtherScanScraper
 from .opensea import OpenSea
 from .provider_composer_interface import IProviderComposer
@@ -61,3 +61,8 @@ class ProviderComposer(IProviderComposer):
 
         if contract_address:
             raise
+
+    def fetch_tokens(
+        self, contract_address: str, cursor=None,
+    ) -> Iterator[Token]:
+        pass
