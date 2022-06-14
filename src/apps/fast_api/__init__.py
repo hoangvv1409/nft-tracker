@@ -9,6 +9,7 @@ from starlette.status import HTTP_400_BAD_REQUEST
 from src.exceptions import AppException
 
 from .healthz import router as HealthzRouter
+from .collections.collections import router as CollectionRouter
 
 LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
@@ -16,6 +17,7 @@ logger = logging.getLogger()
 app = FastAPI()
 
 app.include_router(HealthzRouter)
+app.include_router(CollectionRouter)
 
 origins = ["*"]
 app.add_middleware(
