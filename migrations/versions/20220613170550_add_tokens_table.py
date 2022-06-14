@@ -23,7 +23,7 @@ def upgrade():
 
         sa.Column('token_id', sa.String, nullable=False),
         sa.Column('contract_address', sa.String, nullable=False),
-        sa.Column('metadata', sa.JSON, nullable=True),
+        sa.Column('token_metadata', sa.JSON, nullable=True),
         sa.Column('provider_payload', sa.JSON, nullable=True),
 
         sa.Column('_created_at', sa.TIMESTAMP, nullable=True),

@@ -11,5 +11,5 @@ class TokenSchema(DeclarativeBase, Base, DateTimestamp):
     token_id = Column(String, nullable=False)
     contract_address = Column(String, nullable=False)
 
-    metadata = Column(JSON, nullable=True)
+    token_metadata = Column(JSON, nullable=True)
     provider_payload = Column(JSON, nullable=True)
