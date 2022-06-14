@@ -30,5 +30,5 @@ class IProviderComposer(ABC):
     @abstractmethod
     def fetch_tokens(
         self, contract_address: str, cursor=None,
-    ) -> Iterator[Token]:
+    ) -> Iterator[Tuple[Token, str]]:
         pass

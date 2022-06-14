@@ -1,4 +1,5 @@
 from enum import Enum
+from .dict_ultility import to_dict
 
 
 def validate_links(url):
@@ -43,6 +44,8 @@ def domain_model_to_orm_schema_mapper(schema, domain_model):
             value = getattr(domain_model, attr)
             if isinstance(value, Enum):
                 value = value.value
+            elif hasattr(value, "__dict__"):
+                value = to_dict(value)
 
             setattr(orm_obj, attr, value)
 

@@ -24,7 +24,7 @@ class Token:
     token_id: str
     contract_address: str
 
-    metadata: TokenMetadata
+    token_metadata: TokenMetadata
 
     creator_address: str = None
     provider_payload: Dict = None
@@ -62,7 +62,7 @@ class Token:
         return Token(
             token_id=response['token_id'],
             contract_address=contract_address,
-            metadata=metadata,
+            token_metadata=metadata,
             creator_address=creator_address,
             provider_payload={'opensea': response},
         )
@@ -70,8 +70,8 @@ class Token:
     def __repr__(self):
         response = 'Token Id: {} | Name: {} | Addr: {} | Link: {}'.format(
             self.token_id,
-            self.metadata.name,
+            self.token_metadata.name,
             self.contract_address,
-            self.metadata.image_url,
+            self.token_metadata.image_url,
         )
         return response
