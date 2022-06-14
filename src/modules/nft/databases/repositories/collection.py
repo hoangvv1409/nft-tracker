@@ -10,5 +10,6 @@ class CollectionRepository(ICollectionRepository):
     def get_stats(self, contract_address: str) -> CollectionStatSchema:
         q = self.session.query(CollectionStatSchema)
         q = q.filter(CollectionStatSchema.contract_address == contract_address)
+        q = q.order_by(CollectionStatSchema.one_day_volume.desc())
 
         return q.first()
