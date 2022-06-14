@@ -31,5 +31,9 @@ for r in records:
     fetch_iterator = deps.fetch_tokens_usecase.execute(collection)
     for token in fetch_iterator:
         current_cursor = deps.fetch_tokens_usecase.current_cursor
+        if last_cursor != current_cursor:
+            print(f'-----Cursor {current_cursor}-----')
+            last_cursor = current_cursor
+
         print(token)
         deps.session.commit()
