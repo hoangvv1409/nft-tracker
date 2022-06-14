@@ -26,12 +26,8 @@ class FetchTokens:
             )
             for token, cursor in iterator:
                 self._token_handler(token)
-                yield token
-
-                if not cursor:
-                    return
-
                 self.current_cursor = cursor
+                yield token
 
     def _token_handler(self, token: Token):
         token_orm = self.token_repo.first(
