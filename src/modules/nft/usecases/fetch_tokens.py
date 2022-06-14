@@ -29,7 +29,8 @@ class FetchTokens:
                 yield token
 
                 if not cursor:
-                    break
+                    return
+
                 self.current_cursor = cursor
 
     def _token_handler(self, token: Token):
