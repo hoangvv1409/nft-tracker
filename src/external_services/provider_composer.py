@@ -64,5 +64,10 @@ class ProviderComposer(IProviderComposer):
 
     def fetch_tokens(
         self, contract_address: str, cursor=None,
-    ) -> Iterator[Token]:
-        pass
+    ) -> Iterator[Tuple[Token, str]]:
+        results = self.opensea.get_tokens_of_collection(
+            contract_address, cursor)
+
+        for r in results['assets']:
+            token = Token.create(contract_address, r)
+            yield token, results['next']
