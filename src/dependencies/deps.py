@@ -1,4 +1,3 @@
-from tokenize import Token
 from typing import Any
 from dataclasses import dataclass
 

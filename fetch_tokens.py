@@ -26,6 +26,14 @@ for r in records:
         created_date=r.created_date,
         provider_payload=r.provider_payload,
     )
+    stats = deps.collection_repository.get_stats(collection.contract_address)
+    if not stats:
+        continue
+
+    count = deps.token_repository.count(collection.contract_address)
+
+    if count >= stats.total_supply:
+        continue
 
     last_cursor = None
     fetch_iterator = deps.fetch_tokens_usecase.execute(collection)

@@ -29,5 +29,23 @@ pipenv run alembic upgrade head
 Fetch top Collections (first 20 page of etherscan, sorting by transfer 24H)
 
 ```bash
-pipenv run python fetch_collections.py
+pipenv run fetch_collections
+```
+
+Fetch Collections Stats (collections from above)
+
+```bash
+pipenv run fetch_stats
+```
+
+Fetch Tokens of Collections (collections from above)
+
+```bash
+pipenv run fetch_tokens
+```
+
+Run API
+
+```bash
+pipenv run api
 ```
