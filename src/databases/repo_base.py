@@ -93,6 +93,9 @@ class CRUD(Generic[T]):
     def update(self, obj, flush=True, only=None, **data) -> T:
         if obj:
             for k in data:
+                if k.startswith('_'):
+                    continue
+
                 if hasattr(obj, k) and (only is None or k in only):
                     setattr(obj, k, data.get(k))
         if flush:

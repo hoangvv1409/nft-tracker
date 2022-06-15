@@ -53,6 +53,7 @@ class FetchCollectionsStats:
             domain_model=stats,
         )
 
-        # TODO: update collection case
         if not stats_orm:
             self.collection_repo.create_from_schema(stats_schema)
+        else:
+            self.collection_repo.update(stats_orm, **stats_schema.__dict__)

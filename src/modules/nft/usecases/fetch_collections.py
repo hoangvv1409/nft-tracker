@@ -52,3 +52,6 @@ class FetchCollections:
         # TODO: update collection case
         if not collection_orm:
             self.collection_repo.create_from_schema(collection_schema)
+        else:
+            self.collection_repo.update(
+                collection_orm, **collection_schema.__dict__)
