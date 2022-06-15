@@ -17,6 +17,8 @@ async def get(
     count, total_page, records = \
         deps.token_repository.get_sorted_tokens(
             contract_address=address,
+            page=page,
+            page_size=page_size,
         )
 
     for t in records:
