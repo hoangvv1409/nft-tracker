@@ -44,6 +44,8 @@ def main(id, max_worker):
 
         last_cursor = None
         fetch_iterator = deps.fetch_tokens_usecase.execute(collection)
+        print(f'-----Cursor {last_cursor}-----')
+
         for token in fetch_iterator:
             current_cursor = deps.fetch_tokens_usecase.current_cursor
 
@@ -53,9 +55,6 @@ def main(id, max_worker):
 
             print(token)
             deps.session.commit()
-
-            if not current_cursor:
-                fetch_iterator.close()
 
 
 if __name__ == "__main__":

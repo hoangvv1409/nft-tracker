@@ -24,10 +24,13 @@ class FetchTokens:
                 contract_address=collection.contract_address,
                 cursor=self.current_cursor,
             )
-            for token, cursor in iterator:
+            for token, next_cursor in iterator:
                 self._token_handler(token)
-                self.current_cursor = cursor
                 yield token
+
+            self.current_cursor = next_cursor
+            if not next_cursor:
+                break
 
     def _token_handler(self, token: Token):
         token_orm = self.token_repo.first(
