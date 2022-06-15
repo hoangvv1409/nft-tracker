@@ -1,5 +1,6 @@
 import time
 from requests import Response
+from requests.exceptions import ReadTimeout
 
 
 class NotFound(Exception):
@@ -26,7 +27,14 @@ class BaseClient():
     def response_handler(
         self, request_func, request_params, retry: int = 0,
     ) -> Response:
-        response = request_func(**request_params)
+        try:
+            response = request_func(**request_params)
+        except ReadTimeout as e:
+            if retry <= self._max_retry:
+                return self._retry_request(request_func, request_params, retry)
+            else:
+                raise e
+
         if response.status_code == 500:
             raise InternalServerError
 
@@ -38,11 +46,7 @@ class BaseClient():
 
         if response.status_code == 429:
             if retry <= self._max_retry:
-                retry += 1
-                print(f'{retry} Retrying....')
-                time.sleep(self._sleep_time_sec)
-                return self.response_handler(
-                    request_func, request_params, retry)
+                return self._retry_request(request_func, request_params, retry)
             else:
                 raise RateLimit
 
@@ -52,3 +56,9 @@ class BaseClient():
             raise
 
         return response
+
+    def _retry_request(self, request_func, request_params, retry: int = 0):
+        retry += 1
+        print(f'{retry} Retrying....')
+        time.sleep(self._sleep_time_sec)
+        return self.response_handler(request_func, request_params, retry)
