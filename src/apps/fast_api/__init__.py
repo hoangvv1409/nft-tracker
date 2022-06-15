@@ -10,6 +10,7 @@ from src.exceptions import AppException
 
 from .healthz import router as HealthzRouter
 from .collections.collections import router as CollectionRouter
+from .collections.tokens import router as TokenRouter
 
 LOG_FORMAT = "%(levelname)s %(asctime)s - %(message)s"
 logging.basicConfig(level=logging.INFO, format=LOG_FORMAT)
@@ -18,6 +19,7 @@ app = FastAPI()
 
 app.include_router(HealthzRouter)
 app.include_router(CollectionRouter)
+app.include_router(TokenRouter)
 
 origins = ["*"]
 app.add_middleware(

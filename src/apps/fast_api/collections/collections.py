@@ -1,20 +1,10 @@
-from typing import Any
-from datetime import datetime
 from fastapi import APIRouter, Request, Depends
+from src.utils import to_posix
 from src.utils.dict_ultility import to_dict
 from ..dependencies import resolve_dependencies, Dependencies
 
 router = APIRouter(
     prefix='/v1/collections', tags=['Collections'])
-
-
-def _to_posix(value: Any):
-    if isinstance(value, str):
-        dt = datetime.strptime(value, '%Y-%m-%dT%H:%M:%S.%f%z')
-    elif isinstance(value, datetime):
-        dt = value
-
-    return int(dt.timestamp())
 
 
 @router.get('')
@@ -41,9 +31,8 @@ async def get(
         del collection['provider_payload']
         del stats['id']
 
-        stats['updated_date_posix'] = _to_posix(stats['updated_date'])
-        collection['created_date_posix'] = _to_posix(
-            collection['created_date'])
+        stats['updated_date_posix'] = to_posix(stats['updated_date'])
+        collection['created_date_posix'] = to_posix(collection['created_date'])
 
         collections.append({
             **collection,
