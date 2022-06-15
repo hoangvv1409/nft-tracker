@@ -1,4 +1,5 @@
 from enum import Enum
+from datetime import datetime
 from .dict_ultility import to_dict
 
 
@@ -50,3 +51,14 @@ def domain_model_to_orm_schema_mapper(schema, domain_model):
             setattr(orm_obj, attr, value)
 
     return orm_obj
+
+
+def to_posix(
+    value, datetime_str_format='%Y-%m-%dT%H:%M:%S.%f%z',
+):
+    if isinstance(value, str):
+        dt = datetime.strptime(value, datetime_str_format)
+    elif isinstance(value, datetime):
+        dt = value
+
+    return int(dt.timestamp())
