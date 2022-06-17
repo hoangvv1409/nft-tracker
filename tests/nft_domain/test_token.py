@@ -20,10 +20,11 @@ class TestToken:
         assert token.contract_address == bored_ape_contract_address
         assert token.creator_address == token_payload['creator']['address']
         assert token.provider_payload['opensea'] == token_payload
-        assert token.metadata.name == token_payload['name']
-        assert token.metadata.description == token_payload['description']
-        assert token.metadata.image_url == token_payload['image_original_url']
-        assert token.metadata.metadata_url == token_payload['token_metadata']
-        assert len(token.metadata.attributes) == len(token_payload['traits'])
-        for idx, attr in enumerate(token.metadata.attributes):
+        assert token.token_metadata.name == token_payload['name']
+        assert token.token_metadata.description == token_payload['description']
+        assert token.token_metadata.image_url == token_payload['image_original_url']
+        assert token.token_metadata.metadata_url == token_payload['token_metadata']
+        assert len(token.token_metadata.attributes) == len(
+            token_payload['traits'])
+        for idx, attr in enumerate(token.token_metadata.attributes):
             attr.__dict__ == token_payload['traits'][idx]
