@@ -1,0 +1,14 @@
+[
+  {
+    "address": "0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48",
+    "name": "USD Coin",
+    "symbol": "USDC",
+    "decimals": "6",
+    "logo": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48.png",
+    "logo_hash": "442b80bd16af0c0d9b22e03a16753823fe826e5bfd457292b55fa0ba8c1ba213",
+    "thumbnail": "https://cdn.moralis.io/eth/0xa0b86991c6218b36c1d19d4a2e9eb0ce3606eb48_thumb.png",
+    "block_number": null,
+    "validated": null,
+    "created_at": "2022-01-20T10:39:55.818Z"
+  }
+]
