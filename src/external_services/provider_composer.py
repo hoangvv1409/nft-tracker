@@ -1,4 +1,5 @@
 import os
+import math
 from typing import Iterator, Tuple
 
 from src.modules.nft.domain import (
@@ -105,7 +106,11 @@ class ProviderComposer(IProviderComposer):
 
         for r in response['result']:
             next_cursor = response['cursor']
-            if response['total'] < response['page_size']:
+            total = response['total']
+            page = response['page']
+            page_size = response['page_size']
+            total_page = math.ceil(total / page_size)
+            if page == total_page - 1:
                 next_cursor = None
 
             txn = CollectionTransaction.create(contract_address, r)
