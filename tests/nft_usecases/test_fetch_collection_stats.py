@@ -1,7 +1,10 @@
 import json
 from pathlib import Path
 from typing import List, Iterator, Tuple
-from src.modules.nft.domain import Collection, CollectionStats, Token
+from src.modules.nft.domain import (
+    Collection, CollectionStats, Token,
+    Erc20, CollectionTransaction,
+)
 
 from src.external_services import IProviderComposer
 from src.modules.nft.usecases import FetchCollectionsStats
@@ -52,6 +55,16 @@ class MockProviderComposer(IProviderComposer):
     ) -> Iterator[Token]:
         pass
 
+    def fetch_erc20(self, contract_address: str) -> Erc20:
+        pass
+
+    def fetch_collection_transfer_activity(
+        self, contract_address: str,
+        from_date: str = None, to_date: str = None,
+        cursor: str = None,
+    ) -> Tuple[CollectionTransaction, str]:
+        pass
+
 
 class TestFetchCollectionStats:
     def test_get_non_exist_stats(self):
@@ -74,6 +87,14 @@ class TestFetchCollectionStats:
                 assert contract_address is not None
                 assert contract_address != ''
                 return None
+
+            def get_sorted_collections(
+                self, page: int = 1, page_size: int = 50,
+                query: str = None, sort_by: str = None,
+            ) -> Tuple[
+                int, int, List[Tuple[CollectionSchema, CollectionStatSchema]]
+            ]:
+                pass
 
         fetch_collection_stats = FetchCollectionsStats(
             api_client=MockProviderComposer(),
