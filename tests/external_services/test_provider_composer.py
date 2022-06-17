@@ -44,7 +44,6 @@ class TestProviderComposer:
         assert isinstance(erc20, Erc20)
 
     def test_fetch_erc20_metadata_with_non_exist_contract(self):
-
         client = ProviderComposer()
         erc20 = client.fetch_erc20(non_exist_contract_address)
 
@@ -58,3 +57,15 @@ class TestProviderComposer:
         for txn, next_cursor in txn_gen:
             assert isinstance(txn, CollectionTransaction)
             assert next_cursor is not None
+
+    def test_fetch_collection_transfer_activity_with_date_range(self):
+        client = ProviderComposer()
+        txn_gen = client.fetch_collection_transfer_activity(
+            contract_address=bored_ape_contract_address,
+            from_date='2022-06-15T00:00:00.000Z',
+            to_date='2022-06-15T23:59:59.000Z',
+        )
+
+        for txn, next_cursor in txn_gen:
+            assert isinstance(txn, CollectionTransaction)
+            assert next_cursor is None
