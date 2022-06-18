@@ -101,6 +101,7 @@ class ProviderComposer(IProviderComposer):
             contract_address=contract_address,
             from_date=from_date,
             to_date=to_date,
+            limit=100,
             cursor=cursor,
         )
 
@@ -115,7 +116,8 @@ class ProviderComposer(IProviderComposer):
 
             txn = CollectionTransaction.create(contract_address, r)
             if not txn.currency_token:
-                erc20 = self.fetch_erc20(r['price_token_address'])
-                txn.set_currency_token(erc20.symbol)
+                erc20 = self.fetch_erc20(txn.token_address)
+                if erc20:
+                    txn.set_currency_token(erc20.symbol)
 
             yield txn, next_cursor
