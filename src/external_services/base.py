@@ -1,6 +1,5 @@
 import time
 from requests import Response
-from requests.exceptions import ReadTimeout
 
 
 class NotFound(Exception):
@@ -29,7 +28,7 @@ class BaseClient():
     ) -> Response:
         try:
             response = request_func(**request_params)
-        except ReadTimeout as e:
+        except Exception as e:
             if retry <= self._max_retry:
                 return self._retry_request(request_func, request_params, retry)
             else:
