@@ -26,7 +26,7 @@ class Erc20:
             address=response['address'],
             name=response['name'],
             symbol=response['symbol'],
-            created_at=response['created_at'],
+            created_at=response.get('created_at'),
             provider_payload={'moralis': response},
         )
 
