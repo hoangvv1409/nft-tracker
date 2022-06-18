@@ -67,8 +67,8 @@ if __name__ == "__main__":
     if len(sys.argv) == 2:
         id = int(sys.argv[1])
     if len(sys.argv) == 3:
-        from_date = int(sys.argv[2])
+        from_date = sys.argv[2]
     if len(sys.argv) == 4:
-        to_date = int(sys.argv[3])
+        to_date = sys.argv[3]
 
     main(id, max_worker, from_date, to_date)
