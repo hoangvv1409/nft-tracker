@@ -9,6 +9,7 @@ test = "pipenv run pytest -vvv --disable-warnings --cov=src tests"
 fetch_collections = "pipenv run python fetch_collections.py"
 fetch_stats = "pipenv run python fetch_collections_stats.py"
 fetch_tokens = "pipenv run python fetch_tokens.py"
+fetch_transactions = "pipenv run python fetch_collection_transactions.py"
 
 [packages]
 alembic = "*"
