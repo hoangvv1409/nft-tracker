@@ -15,6 +15,7 @@ class CollectionTransaction:
     block_timestamp: datetime
 
     price: int
+    token_address: str = None
     currency_token: str = None
 
     provider_payload: Dict = None
@@ -43,6 +44,7 @@ class CollectionTransaction:
             buyer_address=response['buyer_address'],
             block_timestamp=response['block_timestamp'],
             price=int(response['price']),
+            token_address=response['token_address'],
             currency_token=currency_token,
             provider_payload={'moralis': response},
         )
@@ -50,3 +52,11 @@ class CollectionTransaction:
     def set_currency_token(self, token: str = 'ETH'):
         if self.currency_token is None:
             self.currency_token = token
+
+    def __repr__(self):
+        response = 'Txn Hash: {} | Tokens: {} | Addr: {}'.format(
+            self.transaction_hash,
+            ','.join(self.token_ids),
+            self.contract_address,
+        )
+        return response
