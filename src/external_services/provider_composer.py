@@ -1,9 +1,14 @@
 import os
+import math
 from typing import Iterator, Tuple
 
-from src.modules.nft.domain import Collection, CollectionStats, Token
+from src.modules.nft.domain import (
+    Collection, CollectionStats, Token,
+    Erc20, CollectionTransaction,
+)
 from .etherscan_scraper import EtherScanScraper
 from .opensea import OpenSea
+from .moralis import Moralis
 from .provider_composer_interface import IProviderComposer
 
 
@@ -15,6 +20,10 @@ class ProviderComposer(IProviderComposer):
         self.opensea = OpenSea(
             base_url=os.getenv('OPENSEA_HOST'),
             api_key=os.getenv('OPENSEA_KEY'),
+        )
+        self.moralis = Moralis(
+            base_url=os.getenv('MORALIS_HOST'),
+            api_key=os.getenv('MORALIS_KEY'),
         )
 
     def fetch_collections_iterator(
@@ -71,3 +80,44 @@ class ProviderComposer(IProviderComposer):
         for r in results['assets']:
             token = Token.create(contract_address, r)
             yield token, results['next']
+
+    def fetch_erc20(self, contract_address: str) -> Erc20:
+        result = self.moralis.get_erc20_metadata(contract_address)
+
+        if len(result) == 0:
+            return
+        if result[0]['name'] == '':
+            return
+
+        erc20 = Erc20.create(result[0])
+        return erc20
+
+    def fetch_collection_transfer_activity(
+        self, contract_address: str,
+        from_date: str = None, to_date: str = None,
+        cursor: str = None,
+    ) -> Tuple[CollectionTransaction, str]:
+        response = self.moralis.get_trade_activity_of_collection(
+            contract_address=contract_address,
+            from_date=from_date,
+            to_date=to_date,
+            limit=100,
+            cursor=cursor,
+        )
+
+        for r in response['result']:
+            next_cursor = response['cursor']
+            total = response['total']
+            page = response['page']
+            page_size = response['page_size']
+            total_page = math.ceil(total / page_size)
+            if page == total_page - 1:
+                next_cursor = None
+
+            txn = CollectionTransaction.create(contract_address, r)
+            if not txn.currency_token:
+                erc20 = self.fetch_erc20(txn.token_address)
+                if erc20:
+                    txn.set_currency_token(erc20.symbol)
+
+            yield txn, next_cursor
