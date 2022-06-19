@@ -54,7 +54,10 @@ def main(id, max_worker):
                 last_cursor = current_cursor
 
             print(token)
-            deps.session.commit()
+            try:
+                deps.session.commit()
+            except Exception:
+                deps.session.rollback()
 
 
 if __name__ == "__main__":
