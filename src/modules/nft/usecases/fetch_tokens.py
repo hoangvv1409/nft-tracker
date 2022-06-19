@@ -25,6 +25,9 @@ class FetchTokens:
                 cursor=self.current_cursor,
             )
             for token, next_cursor in iterator:
+                if not token.token_id:
+                    continue
+
                 self._token_handler(token)
                 yield token
 
