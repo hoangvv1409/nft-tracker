@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker, scoped_session
 from src.databases.connection import db_engine, bind_session
 from src.dependencies import Dependencies
 from src.modules.nft.domain import Collection, Chain, ContractType
+from src.databases.repo_base import Duplicate
 
 # TODO:
 # Use click in the near future
@@ -55,7 +56,11 @@ def main(
                 last_cursor = current_cursor
 
             print(txn)
-            deps.session.commit()
+
+            try:
+                deps.session.commit()
+            except Duplicate:
+                deps.session.rollback()
 
 
 if __name__ == "__main__":
