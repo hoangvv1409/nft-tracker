@@ -1,4 +1,5 @@
 import os
+import pdb
 import sys
 from sqlalchemy.orm import sessionmaker, scoped_session
 from src.databases.connection import db_engine, bind_session
@@ -69,11 +70,11 @@ if __name__ == "__main__":
     from_date = None
     to_date = None
 
-    if len(sys.argv) == 2:
+    if len(sys.argv) >= 2:
         id = int(sys.argv[1])
-    if len(sys.argv) == 3:
+    if len(sys.argv) >= 3:
         from_date = sys.argv[2]
-    if len(sys.argv) == 4:
+    if len(sys.argv) >= 4:
         to_date = sys.argv[3]
 
     main(id, max_worker, from_date, to_date)
