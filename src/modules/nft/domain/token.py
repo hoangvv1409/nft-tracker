@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import List, Dict
 from dataclasses import dataclass, field
 from .collection import ApiProvider
@@ -29,6 +30,12 @@ class Token:
     creator_address: str = None
     provider_payload: Dict = None
 
+    current_price: int = None
+    last_price: int = None
+    owner_address: str = None
+    block_timestamp: datetime = None
+    transfer_token: str = None
+
     @staticmethod
     def create(
         contract_address: str, response: Dict,
@@ -36,6 +43,16 @@ class Token:
     ):
         if provider == ApiProvider.OPENSEA:
             return Token._create_from_opensea(contract_address, response)
+
+    def transfer(
+        self, price: int, transfer_token: str,
+        owner_address: str, block_timestamp: datetime,
+    ):
+        self.last_price = self.current_price
+        self.current_price = price
+        self.transfer_token = transfer_token
+        self.owner_address = owner_address
+        self.block_timestamp = block_timestamp
 
     @staticmethod
     def _create_from_opensea(contract_address: str, response: Dict):
@@ -55,15 +72,15 @@ class Token:
             attributes=attrs,
         )
 
-        creator_address = None
-        if response['creator']:
-            creator_address = response['creator']['address']
+        # creator_address = None
+        # if response['creator']:
+        #     creator_address = response['creator']['address']
 
         return Token(
             token_id=response['token_id'],
             contract_address=contract_address,
             token_metadata=metadata,
-            creator_address=creator_address,
+            # creator_address=creator_address,
             provider_payload={'opensea': response},
         )
 
