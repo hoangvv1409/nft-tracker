@@ -29,7 +29,7 @@ def upgrade():
         sa.Column('buyer_address', sa.String, nullable=False),
 
         sa.Column('price', sa.DECIMAL, nullable=False),
-        sa.Column('token_address', sa.String, nullable=False),
+        sa.Column('token_address', sa.String, nullable=True),
         sa.Column('currency_token', sa.String, nullable=True),
 
         sa.Column('provider_payload', sa.JSON, nullable=False),

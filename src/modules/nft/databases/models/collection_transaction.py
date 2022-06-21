@@ -17,7 +17,7 @@ class CollectionTransactionSchema(DeclarativeBase, Base, DateTimestamp):
     buyer_address = Column(String, nullable=True)
 
     price = Column(DECIMAL, nullable=False)
-    token_address = Column(String, nullable=False)
+    token_address = Column(String, nullable=True)
     currency_token = Column(String, nullable=True)
 
     provider_payload = Column(JSON, nullable=False)
