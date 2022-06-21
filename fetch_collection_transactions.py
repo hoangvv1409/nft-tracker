@@ -1,5 +1,4 @@
 import os
-import pdb
 import sys
 from sqlalchemy.orm import sessionmaker, scoped_session
 from src.databases.connection import db_engine, bind_session

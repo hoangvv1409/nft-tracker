@@ -52,6 +52,7 @@ class Dependencies:
         )
         fetch_collection_transaction = FetchCollectionTransaction(
             api_client=api_client,
+            token_repository=token_repo,
             collection_transaction_repository=collection_transaction_repo,
         )
 
