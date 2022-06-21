@@ -44,7 +44,7 @@ class CollectionTransaction:
             buyer_address=response['buyer_address'],
             block_timestamp=response['block_timestamp'],
             price=int(response['price']),
-            token_address=response['token_address'],
+            token_address=response['price_token_address'],
             currency_token=currency_token,
             provider_payload={'moralis': response},
         )
