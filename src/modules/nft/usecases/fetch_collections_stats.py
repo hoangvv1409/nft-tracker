@@ -1,9 +1,9 @@
 from typing import Iterator, Tuple
 
 from src.utils import domain_model_to_orm_schema_mapper
-from src.modules.nft.domain import (
-    Collection, CollectionStats, Chain, ContractType)
+from src.modules.nft.domain import Collection, CollectionStats
 from ..databases.models import CollectionStatSchema
+from .mapper import collection_orm_to_model
 
 from src.external_services import IProviderComposer
 from ..databases.interface import ICollectionRepository
@@ -20,19 +20,7 @@ class FetchCollectionsStats:
     def execute(self) -> Iterator[Tuple[Collection, CollectionStats]]:
         collections_orm = self.collection_repo.find()
         for collection_orm in collections_orm:
-            # TODO: move this to common mapper
-            collection = Collection(
-                contract_address=collection_orm.contract_address,
-                name=collection_orm.name,
-                symbol=collection_orm.symbol,
-                chain=Chain(collection_orm.chain),
-                type=ContractType(collection_orm.type),
-                logo=collection_orm.logo,
-                description=collection_orm.description,
-                official_site=collection_orm.official_site,
-                created_date=collection_orm.created_date,
-                provider_payload=collection_orm.provider_payload,
-            )
+            collection = collection_orm_to_model(collection_orm)
             try:
                 stats = self.api_client.fetch_collection_stats(
                     contract_address=collection.contract_address,

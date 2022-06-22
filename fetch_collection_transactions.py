@@ -3,7 +3,7 @@ import sys
 from sqlalchemy.orm import sessionmaker, scoped_session
 from src.databases.connection import db_engine, bind_session
 from src.dependencies import Dependencies
-from src.modules.nft.domain import Collection, Chain, ContractType
+from src.modules.nft.usecases. mapper import collection_orm_to_model
 from src.databases.repo_base import Duplicate
 
 # TODO:
@@ -25,19 +25,7 @@ def main(
         if r.id % max_worker != id:
             continue
 
-        collection = Collection(
-            contract_address=r.contract_address,
-            name=r.name,
-            symbol=r.symbol,
-            chain=Chain(r.chain),
-            type=ContractType(r.type),
-            logo=r.logo,
-            description=r.description,
-            official_site=r.official_site,
-            created_date=r.created_date,
-            provider_payload=r.provider_payload,
-        )
-
+        collection = collection_orm_to_model(r)
         last_cursor = None
         fetch_iterator = deps.fetch_collection_transaction_usecase.execute(
             collection=collection,
