@@ -3,7 +3,7 @@ from typing import Iterator
 
 from src.utils import domain_model_to_orm_schema_mapper
 from src.modules.nft.domain import Collection
-from ..databases.models import CollectionSchema
+from ..databases.models import CollectionSchema, CollectionStatSchema
 
 from src.external_services import IProviderComposer
 from ..databases.interface import ICollectionRepository
@@ -32,6 +32,7 @@ class FetchCollections:
 
             for collection in collection_iterator:
                 self._collection_handler(collection)
+                self._collection_stats_handler(collection)
                 yield collection
 
             self.current_page += 1
@@ -55,3 +56,26 @@ class FetchCollections:
         else:
             self.collection_repo.update(
                 collection_orm, **collection_schema.__dict__)
+
+    def _collection_stats_handler(self, collection: Collection):
+        try:
+            stats = self.api_client.fetch_collection_stats(
+                contract_address=collection.contract_address,
+                slug=collection.opensea_slug,
+            )
+
+            stats_orm = self.collection_repo.get_stats(
+                contract_address=stats.contract_address)
+
+            stats_schema = domain_model_to_orm_schema_mapper(
+                schema=CollectionStatSchema,
+                domain_model=stats,
+            )
+
+            if not stats_orm:
+                self.collection_repo.create_from_schema(stats_schema)
+            else:
+                self.collection_repo.update(stats_orm, **stats_schema.__dict__)
+        # TODO: Handling exception here (Notfound, BadRequest, ...)
+        except:
+            return
