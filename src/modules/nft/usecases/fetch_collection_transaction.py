@@ -1,11 +1,9 @@
 from typing import Iterator, List
 
 from src.utils import domain_model_to_orm_schema_mapper
-from src.modules.nft.domain import (
-    Collection, CollectionTransaction,
-    Token, TokenAttribute, TokenMetadata,
-)
+from src.modules.nft.domain import Collection, CollectionTransaction
 from ..databases.models import CollectionTransactionSchema, TokenSchema
+from src.modules.nft.usecases.mapper import token_orm_to_model
 
 from src.external_services import IProviderComposer
 from ..databases.interface import (
@@ -54,7 +52,7 @@ class FetchCollectionTransaction:
             if not token_orm:
                 continue
 
-            token = self._map_token_orm_to_token(token_orm)
+            token = token_orm_to_model(token_orm)
             if (not token.block_timestamp or
                     token.block_timestamp < txn.block_timestamp):
                 token.transfer(
@@ -82,27 +80,3 @@ class FetchCollectionTransaction:
         )
 
         self.collection_transaction_repo.create_from_schema(txn_schema)
-
-    def _map_token_orm_to_token(self, token_orm: TokenSchema):
-        attrs = []
-        for attr in token_orm.token_metadata['attributes']:
-            attrs.append(
-                TokenAttribute(
-                    trait_type=attr['trait_type'],
-                    value=attr['value'],
-                    trait_count=attr['trait_count'],
-                )
-            )
-
-        token = Token(
-            token_id=token_orm.token_id,
-            contract_address=token_orm.contract_address,
-            provider_payload=token_orm.provider_payload,
-            token_metadata=TokenMetadata(
-                name=token_orm.token_metadata['name'],
-                description=token_orm.token_metadata['description'],
-                image_url=token_orm.token_metadata['image_url'],
-                metadata_url=token_orm.token_metadata['metadata_url'],
-                attributes=attrs
-            ))
-        return token
